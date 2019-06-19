@@ -23,7 +23,7 @@ class Item(models.Model):
     guid = models.CharField(max_length=32, primary_key=True, editable=False, default=generate_uuid)
     title = models.CharField(max_length=64, null=False, blank=False)
     description = models.TextField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, db_column='category_guid', on_delete=models.CASCADE)
     metadata = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(editable=False, default=datetime.now)
     modified_at = models.DateTimeField(editable=False, default=datetime.now)
