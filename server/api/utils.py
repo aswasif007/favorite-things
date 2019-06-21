@@ -4,7 +4,11 @@ import uuid
 from django.core.validators import RegexValidator
 
 
-color_code_validator = RegexValidator(r'#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})')
+color_code_validator = RegexValidator(
+    r'^#([1-9a-fA-F]{3}|[1-9a-fA-F]{6})$',
+    message='Must be a valid color hex',
+    code='invalid_hex',
+)
 
 
 def generate_uuid():
