@@ -1,5 +1,7 @@
 from django.db import models
 
+from jsonfield import JSONField
+
 from .utils import generate_uuid, generate_color, color_code_validator
 
 
@@ -15,6 +17,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = 'Categories'
+        ordering = ['-created_at']
 
 
 class Item(models.Model):
@@ -22,12 +25,15 @@ class Item(models.Model):
     title = models.CharField(max_length=64, null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, db_column='category_guid', on_delete=models.CASCADE)
-    metadata = models.TextField(null=True, blank=True)
+    metadata = JSONField(null=True, blank=True)
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
     modified_at = models.DateTimeField(editable=False, auto_now=True)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 class Rank(models.Model):
@@ -44,3 +50,4 @@ class AuditLog(models.Model):
     class Meta:
         verbose_name_plural = 'Audit Logs'
         verbose_name = 'Audit Log'
+        ordering = ['-created_at']
