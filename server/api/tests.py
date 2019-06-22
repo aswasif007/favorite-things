@@ -122,3 +122,50 @@ class TestItemView(TestCase):
 
         assertObjects(expected_item, returned_item, ['title', 'description', 'metadata'])
         self.assertEqual(expected_item.category.guid, returned_item['category'])
+
+
+class TestSingleItemApiView(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+        self.category = Category.objects.create(title='category')
+        self.item = Item.objects.create(title='item', category=self.category, description='foo', metadata={'foo': 'bar'})
+        self.endpoint = f'/api/v0/items/{self.item.guid}'
+
+    def test_get(self):
+        response = self.client.get(self.endpoint)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_item = response.json()
+        expected_item = self.item
+
+        assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata'])
+
+    def test_put(self):
+        request_body = {'title': 'new_title', 'category': self.category.guid}
+        response = self.client.put(self.endpoint, data=request_body, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_item = response.json()
+        self.item.refresh_from_db()
+        expected_item = self.item
+
+        assertObjects(expected_item, returned_item, ['title'])
+
+    def test_patch(self):
+        response = self.client.patch(self.endpoint, data={'description': 'foo'}, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_item = response.json()
+        self.item.refresh_from_db()
+        expected_item = self.item
+
+        assertObjects(expected_item, returned_item, ['description'])
+
+    def test_delete(self):
+        response = self.client.delete(self.endpoint)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        with self.assertRaises(Item.DoesNotExist):
+            self.item.refresh_from_db()

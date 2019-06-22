@@ -18,3 +18,8 @@ class SingleCategoryView(RetrieveUpdateDestroyAPIView):
 class ItemView(ListCreateAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+
+
+class SingleItemView(RetrieveUpdateDestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer

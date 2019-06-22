@@ -11,7 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    metadata = serializers.JSONField()
+    metadata = serializers.JSONField(required=False)
 
     class Meta:
         model = Item
