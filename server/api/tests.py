@@ -38,3 +38,48 @@ class TestCategoryView(TestCase):
         expected_category = Category.objects.get(guid=returned_category['guid'])
 
         assertObjects(expected_category, returned_category, ['title', 'color_code'])
+
+
+class TestSingleCategoryView(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+        self.category = Category.objects.create(title='test_cat_1')
+        self.endpoint = f'/api/v0/categories/{self.category.guid}'
+
+    def test_get(self):
+        response = self.client.get(self.endpoint)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_category = response.json()
+        expected_category = self.category
+
+        assertObjects(expected_category, returned_category, ['guid', 'title', 'color_code'])
+
+    def test_put(self):
+        response = self.client.put(self.endpoint, data={'title': 'new_title'}, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_category = response.json()
+        self.category.refresh_from_db()
+        expected_category = self.category
+
+        assertObjects(expected_category, returned_category, ['title'])
+
+    def test_patch(self):
+        response = self.client.patch(self.endpoint, data={'color_code': '#122'}, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_category = response.json()
+        self.category.refresh_from_db()
+        expected_category = self.category
+
+        assertObjects(expected_category, returned_category, ['color_code'])
+
+    def test_delete(self):
+        response = self.client.delete(self.endpoint)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        with self.assertRaises(Category.DoesNotExist):
+            self.category.refresh_from_db()
