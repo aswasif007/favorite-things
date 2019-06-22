@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 
 from rest_framework import status
 
-from .models import Category
+from .models import Category, Item
 
 
 def assertObjects(db_object, json_dict, fields):
@@ -83,3 +83,42 @@ class TestSingleCategoryView(TestCase):
 
         with self.assertRaises(Category.DoesNotExist):
             self.category.refresh_from_db()
+
+
+class TestItemView(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.endpoint = '/api/v0/items/'
+        self.category = Category.objects.create(title='test_category')
+
+    def test_get(self):
+        Item.objects.create(title='test_item_1', category=self.category, metadata={'foo': 'bar'})
+        Item.objects.create(title='test_item_2', category=self.category, description='foo bar')
+
+        response = self.client.get(self.endpoint)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_items = response.json()
+        expected_items = Item.objects.all()
+        self.assertEqual(len(expected_items), len(returned_items))
+
+        for expected_item, returned_item in zip(expected_items, returned_items):
+            assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata'])
+            self.assertEqual(expected_item.category.guid, returned_item['category'])
+
+    def test_create(self):
+        request_body = {
+            'title': 'test_item_3',
+            'category': self.category.guid,
+            'description': 'foo bar',
+            'metadata': {'foo': 'bar'}
+        }
+        response = self.client.post(self.endpoint, data=request_body, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        returned_item = response.json()
+        expected_item = Item.objects.get(guid=returned_item['guid'])
+
+        assertObjects(expected_item, returned_item, ['title', 'description', 'metadata'])
+        self.assertEqual(expected_item.category.guid, returned_item['category'])
