@@ -11,6 +11,7 @@ ipdb = "*"
 django = "*"
 djangorestframework = "*"
 mysqlclient = "*"
+django-jsonfield = "*"
 
 [requires]
 python_version = "3.6"
