@@ -37,7 +37,7 @@ class Item(models.Model):
 
 
 class Rank(models.Model):
-    data = models.TextField()
+    data = JSONField(default={})
 
 
 class AuditLog(models.Model):
