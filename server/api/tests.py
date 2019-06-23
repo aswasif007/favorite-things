@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 
 from rest_framework import status
 
-from .models import Category, Item, Rank
+from .models import Category, Item, Rank, AuditLog
 
 
 def assertObjects(db_object, json_dict, fields):
@@ -211,3 +211,29 @@ class TestSingleItemRankView(TestCase):
         
         self.item_2.refresh_from_db()
         self.assertEqual(self.item_2.rank, 1)
+
+
+class TestAuditLogView(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.endpoint = '/api/v0/audit_logs/'
+
+    def test_get(self):
+        category = Category.objects.create(title='test_cat')
+        item = Item.objects.create(title='test_item', category=category)
+
+        category.color_code = '#123'
+        category.save()
+
+        item.delete()
+
+        response = self.client.get(self.endpoint)
+
+        returned_logs = response.json()
+        expected_logs = AuditLog.objects.all()
+
+        self.assertEqual(len(returned_logs), 4)
+
+        for expected_log, returned_log in zip(expected_logs, returned_logs):
+            assertObjects(expected_log, returned_log, ['log'])

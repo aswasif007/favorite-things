@@ -3,10 +3,10 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from .models import Item, Category, Rank
-from .serializers import CategorySerializer, ItemSerializer
+from .models import Item, Category, Rank, AuditLog
+from .serializers import CategorySerializer, ItemSerializer, AuditLogSerializer
 
 
 class CategoryView(ListCreateAPIView):
@@ -59,3 +59,8 @@ class SingleItemRankView(APIView):
         rank_obj.save()
 
         return Response({'guid': pk, 'rank': new_rank}, status=status.HTTP_200_OK)
+
+
+class AuditLogView(ListAPIView):
+    queryset = AuditLog.objects.all()
+    serializer_class = AuditLogSerializer
