@@ -32,6 +32,30 @@ class Item(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def rank(self):
+        rank_obj = Rank.objects.first()
+        return rank_obj.data.get(self.guid)
+
+    def save(self, *args, **kwargs):
+        rank_obj = Rank.objects.first()
+
+        if not rank_obj:
+            rank_obj = Rank.objects.create()
+
+        rank_obj.insert_item(self.guid)
+        rank_obj.save()
+
+        return super(Item, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        rank_obj = Rank.objects.first()
+
+        rank_obj.delete_item(self.guid)
+        rank_obj.save()
+
+        return super(Item, self).delete(*args, **kwargs)
+
     class Meta:
         ordering = ['-created_at']
 

@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 
 from rest_framework import status
 
-from .models import Category, Item
+from .models import Category, Item, Rank
 
 
 def assertObjects(db_object, json_dict, fields):
@@ -104,7 +104,7 @@ class TestItemView(TestCase):
         self.assertEqual(len(expected_items), len(returned_items))
 
         for expected_item, returned_item in zip(expected_items, returned_items):
-            assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata'])
+            assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata', 'rank'])
             self.assertEqual(expected_item.category.guid, returned_item['category'])
 
     def test_create(self):
@@ -120,8 +120,9 @@ class TestItemView(TestCase):
         returned_item = response.json()
         expected_item = Item.objects.get(guid=returned_item['guid'])
 
-        assertObjects(expected_item, returned_item, ['title', 'description', 'metadata'])
+        assertObjects(expected_item, returned_item, ['title', 'description', 'metadata', 'rank'])
         self.assertEqual(expected_item.category.guid, returned_item['category'])
+        self.assertEqual(expected_item.rank, Item.objects.count())
 
 
 class TestSingleItemApiView(TestCase):
@@ -130,7 +131,12 @@ class TestSingleItemApiView(TestCase):
         self.client = Client()
 
         self.category = Category.objects.create(title='category')
-        self.item = Item.objects.create(title='item', category=self.category, description='foo', metadata={'foo': 'bar'})
+        self.item = Item.objects.create(
+            title='item',
+            category=self.category,
+            description='foo',
+            metadata={'foo': 'bar'},
+        )
         self.endpoint = f'/api/v0/items/{self.item.guid}'
 
     def test_get(self):
@@ -140,7 +146,7 @@ class TestSingleItemApiView(TestCase):
         returned_item = response.json()
         expected_item = self.item
 
-        assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata'])
+        assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata', 'rank'])
 
     def test_put(self):
         request_body = {'title': 'new_title', 'category': self.category.guid}
@@ -166,6 +172,12 @@ class TestSingleItemApiView(TestCase):
     def test_delete(self):
         response = self.client.delete(self.endpoint)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        rank = Rank.objects.first()
+        self.assertNotIn(self.item.guid, rank.data)
+
+        sorted_rank_data = sorted(rank.data.values())
+        self.assertListEqual(sorted_rank_data, list(range(1, Item.objects.count() + 1)))
 
         with self.assertRaises(Item.DoesNotExist):
             self.item.refresh_from_db()
