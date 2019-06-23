@@ -2,7 +2,7 @@ from django.db import models
 
 from jsonfield import JSONField
 
-from .utils import generate_uuid, generate_color, color_code_validator
+from .utils import generate_uuid, generate_color, color_code_validator, RankHandler
 
 
 class Category(models.Model):
@@ -36,7 +36,7 @@ class Item(models.Model):
         ordering = ['-created_at']
 
 
-class Rank(models.Model):
+class Rank(models.Model, RankHandler):
     data = JSONField(default={})
 
 
