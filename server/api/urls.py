@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CategoryView, SingleCategoryView, ItemView, SingleItemView
+from .views import CategoryView, SingleCategoryView, ItemView, SingleItemView, SingleItemRankView
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
 
     path('items/', ItemView.as_view()),
     path('items/<str:pk>', SingleItemView.as_view()),
+    path('items/<str:pk>/rank', SingleItemRankView.as_view()),
 ]

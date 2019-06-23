@@ -181,3 +181,33 @@ class TestSingleItemApiView(TestCase):
 
         with self.assertRaises(Item.DoesNotExist):
             self.item.refresh_from_db()
+
+
+class TestSingleItemRankView(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+        category = Category.objects.create(title='category')
+        self.item_1 = Item.objects.create(title='item_1', category=category)
+        self.item_2 = Item.objects.create(title='item_2', category=category)
+        self.endpoint = f'/api/v0/items/{self.item_2.guid}/rank'
+
+    def test_get(self):
+        response = self.client.get(self.endpoint)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_data = response.json()
+        expected_data = self.item_2
+
+        assertObjects(expected_data, returned_data, ['guid', 'rank'])
+
+    def test_update(self):
+        response = self.client.put(self.endpoint, data={'rank': 1}, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.item_1.refresh_from_db()
+        self.assertEqual(self.item_1.rank, 2)
+        
+        self.item_2.refresh_from_db()
+        self.assertEqual(self.item_2.rank, 1)
