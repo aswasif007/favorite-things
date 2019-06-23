@@ -16,9 +16,11 @@ class Category(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        is_new = self._state.adding
+
         super(Category, self).save(*args, **kwargs)
 
-        if self.pk:
+        if not is_new:
             AuditLog.new_log(f'Category {self.title} updated.')
         else:
             AuditLog.new_log(f'Category {self.title} created.')
@@ -59,9 +61,11 @@ class Item(models.Model):
         rank_obj.insert_item(self.guid)
         rank_obj.save()
 
+        is_new = self._state.adding
+
         super(Item, self).save(*args, **kwargs)
 
-        if self.pk:
+        if not is_new:
             AuditLog.new_log(f'Item {self.title} updated.')
         else:
             AuditLog.new_log(f'Item {self.title} created.')
