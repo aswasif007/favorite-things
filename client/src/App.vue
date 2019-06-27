@@ -12,9 +12,7 @@
         </div>
       </div>
       <div class="col-sm-4 col-md-6 col-lg-8">
-        <div>
-          <main-panel></main-panel>
-        </div>
+        <main-panel />
       </div>
       <div class="col">
         <div class="position-fixed app-logs">
@@ -53,6 +51,7 @@ export default {
   padding: 20px 15px;
   background: $White;
   width: 100%;
+  z-index: 10;
 }
 
 .app-body {

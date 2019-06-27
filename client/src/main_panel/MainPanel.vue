@@ -14,15 +14,20 @@
         </div>
       </div>
     </div>
-    <div class="row item-container">
-      Items
+    <div class="item-container">
+      <grid-view />
     </div>
   </div>
 </template>
 
 <script>
+import GridView from './grid_view/GridView.vue';
+
 export default {
   name: "MainPanel",
+  components: {
+    GridView
+  },
 }
 </script>
 
@@ -34,7 +39,8 @@ export default {
   padding: 10px 15px;
   background: $White;
   width: 100%;
-  box-shadow: 2px 4px 4px $LightGray;
+  box-shadow: 1px 1px 2px $MediumGray;
+  z-index: 9;
 }
 
 .action-bar {
