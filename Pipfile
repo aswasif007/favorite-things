@@ -12,6 +12,7 @@ django = "*"
 djangorestframework = "*"
 mysqlclient = "*"
 django-jsonfield = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.6"
