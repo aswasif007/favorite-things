@@ -52,6 +52,10 @@ class Item(models.Model):
         rank_obj = Rank.objects.first()
         return rank_obj.data.get(self.guid)
 
+    @property
+    def category_obj(self):
+        return self.category
+
     def save(self, *args, **kwargs):
         rank_obj = Rank.objects.first()
 

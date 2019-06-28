@@ -13,6 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     metadata = serializers.JSONField(required=False)
     rank = serializers.IntegerField(read_only=True)
+    category_obj = CategorySerializer(read_only=True)
 
     class Meta:
         model = Item
