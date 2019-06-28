@@ -7,6 +7,12 @@ function getItems() {
   return axios.get(url);
 }
 
+function getCategories() {
+  const url = API + 'categories/';
+  return axios.get(url);
+}
+
 export {
   getItems,
+  getCategories,
 };

@@ -8,7 +8,7 @@
     <div class="row app-body">
       <div class="col">
         <div class="position-fixed">
-          CATEGORIES
+          <left-panel :categories="categories" />
         </div>
       </div>
       <div class="col-sm-4 col-md-6 col-lg-8">
@@ -25,13 +25,30 @@
 
 <script>
 import MainPanel from './main_panel/MainPanel.vue';
+import LeftPanel from './left_panel/LeftPanel.vue';
+
+import { getCategories } from './services';
 
 export default {
   name: 'app',
-
+  data () {
+    return {
+      categories: [],
+    };
+  },
+  created () {
+    this.fetchCategories();
+  },
   components: {
     MainPanel,
-  }
+    LeftPanel,
+  },
+  methods: {
+    async fetchCategories () {
+      const categoryResp = await getCategories();
+      this.categories = categoryResp.data;
+    },
+  },
 }
 </script>
 

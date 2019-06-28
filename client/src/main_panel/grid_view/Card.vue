@@ -30,7 +30,7 @@ export default {
 
   .category-dot {
     position: absolute;
-    font-size: 28px;
+    font-size: $CategoryDotSize;
     line-height: 22px;  
   }
 
