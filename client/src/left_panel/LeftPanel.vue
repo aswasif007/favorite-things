@@ -32,6 +32,7 @@ export default {
   .header {
     position: relative;
     font-size: 16px;
+    margin-top: 2px;
 
     .title {
       font-weight: bold;

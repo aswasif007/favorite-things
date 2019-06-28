@@ -1,9 +1,10 @@
 <template>
   <div id="MainPanel">
-    <div class="row task-bar">
+    <div class="row">
       <div class="col-8">
         <div class="position-fixed search-bar">
-          Searchbar
+          <input type="text" :model="query">
+          <span><i class="fa fa-search"></i></span>
         </div>
       </div>
       <div class="col-4">
@@ -51,33 +52,53 @@ export default {
 <style lang="scss">
 @import "../_variables.scss";
 
-.search-bar {
-  margin: -10px -50%;
-  padding: 10px 50%;
-  background: $White;
-  width: 150%;
-  box-shadow: 1px 1px 2px $MediumGray;
-  z-index: 9;
-}
+#MainPanel {
+  .search-bar {
+    margin: -10px -50%;
+    padding: 10px 50%;
+    background: $White;
+    width: 150%;
+    box-shadow: 1px 1px 2px $MediumGray;
+    z-index: 9;
 
-.action-bar {
-  margin-left: -70px;
-  z-index: 10;
+    input {
+      margin-left: -10px;
+      padding-left: 5px;
+      padding-right: 28px;
+      border: 1px solid $MediumGray;
+      border-radius: 3px;
+    }
 
-  span {
-    margin-left: 10px;
-    cursor: pointer;
-    opacity: 0.7;
-
-    &:hover {
-      opacity: 1;
-      color: $DodgerBlue;
+    span {
+      margin-left: -27px;
+      opacity: 0.4;
+      
+      i {
+        font-size: 14px;
+      };
     }
   }
-}
-
-.item-container {
-  padding-top: 20px;
-  margin-top: 30px;
+  
+  .action-bar {
+    margin-left: -70px;
+    z-index: 10;
+    padding-top: 3px;
+  
+    span {
+      margin-left: 10px;
+      cursor: pointer;
+      opacity: 0.7;
+  
+      &:hover {
+        opacity: 1;
+        color: $DodgerBlue;
+      }
+    }
+  }
+  
+  .item-container {
+    padding-top: 20px;
+    margin-top: 30px;
+  }
 }
 </style>
