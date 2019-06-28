@@ -9,7 +9,9 @@
       <div class="col-4">
         <div class="float-right">
           <div class="position-fixed action-bar">
-            Actions
+            <span><i class="fas fa-grip-horizontal"></i></span>
+            <span><i class="fas fa-bars"></i></span>
+            <span><i class="fas fa-plus"></i></span>
           </div>
         </div>
       </div>
@@ -59,8 +61,19 @@ export default {
 }
 
 .action-bar {
-  margin-left: -50px;
+  margin-left: -70px;
   z-index: 10;
+
+  span {
+    margin-left: 10px;
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+      color: $DodgerBlue;
+    }
+  }
 }
 
 .item-container {
