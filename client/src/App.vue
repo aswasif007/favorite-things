@@ -53,7 +53,7 @@ export default {
 .app-title {
   font-size: 40px;
   font-weight: 600;
-  padding: 15px 0;
+  padding: 15px;
   z-index: 10;
   background: $White;
 }

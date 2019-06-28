@@ -8,6 +8,7 @@
       <div class="category" v-for="category in categories" :key="category.guid">
         <div class="dot" :style="{color: category.color_code}">&bull;</div>
         <div class="title">{{category.title}}</div>
+        <div class="action"><i class="fas fa-pen"></i></div>
       </div>
     </div>
   </div>  
@@ -47,6 +48,7 @@ export default {
 
         &:hover {
           opacity: 1;
+          color: $DodgerBlue;
         }
       }
     }
@@ -58,15 +60,14 @@ export default {
 
     .category {
       position: relative;
-      line-height: 22px;
-      margin: 5px -5px;
-      padding: 0 5px;
+      line-height: 25px;
+      margin: 5px 0;
       border-radius: 3px;
-      transition: background-color 0.4s ease;
 
       .dot {
         position: absolute;
         font-size: $CategoryDotSize;
+        line-height: 23px;
       }
 
       .title {
@@ -78,9 +79,29 @@ export default {
         white-space: nowrap;
       }
 
+      .action {
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: 0.7;
+        font-size: 14px;
+        display: none;
+
+        &:hover {
+          color: $DodgerBlue;
+          opacity: 1;
+          cursor: pointer;
+        }
+      }
+
       &:hover {
-        cursor: pointer;
-        background-color: $PowderBlue;
+        .action {
+          display: block;
+        }
+
+        .title {
+          margin-right: 15px;
+        }
       }
     }
   }
