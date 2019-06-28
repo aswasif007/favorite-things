@@ -1,6 +1,6 @@
 <template>
   <div id="Card" class="card">
-    <div class="category-dot" :style="{color: item.category.color_code}">&bull;</div>
+    <div class="category-dot" :style="{color: item.category_obj.color_code}">&bull;</div>
     <div class="title">{{item.title}}</div>
     <div class="rank">#{{item.rank}}</div>
     <div class="actions">

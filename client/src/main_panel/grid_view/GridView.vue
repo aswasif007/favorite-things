@@ -1,7 +1,7 @@
 <template>
   <div id="GridView" class="row">
-    <div v-for="index in 10" :key="index" class="col-sm-12 col-md-6 col-lg-4 cards">
-      <card />
+    <div v-for="item in items" :key="item.guid" class="col-sm-12 col-md-6 col-lg-4 col-xl-3 cards">
+      <card :item="item" />
     </div>
   </div>
 </template>
@@ -11,6 +11,7 @@ import Card from './Card.vue';
 
 export default {
   name: 'GridView',
+  props: ['items'],
   components: {
     Card,
   }

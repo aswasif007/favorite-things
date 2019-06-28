@@ -15,19 +15,34 @@
       </div>
     </div>
     <div class="item-container">
-      <grid-view />
+      <grid-view :items="items" />
     </div>
   </div>
 </template>
 
 <script>
 import GridView from './grid_view/GridView.vue';
+import { getItems } from '../services';
 
 export default {
   name: "MainPanel",
+  data () {
+    return {
+      items: [],
+    };
+  },
+  created () {
+    this.fetchItems();
+  },
   components: {
     GridView
   },
+  methods: {
+    async fetchItems () {
+      const itemResp = await getItems();
+      this.items = itemResp.data;
+    },
+  }
 }
 </script>
 
