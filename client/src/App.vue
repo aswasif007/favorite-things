@@ -7,17 +7,12 @@
     </div>
     <div class="row app-body">
       <div class="col">
-        <div class="position-fixed">
+        <div class="position-fixed left-panel">
           <left-panel :categories="categories" />
         </div>
       </div>
-      <div class="col-sm-4 col-md-6 col-lg-8">
+      <div class="col-sm-6 col-md-8 col-lg-9">
         <main-panel />
-      </div>
-      <div class="col">
-        <div class="position-fixed app-logs">
-          LOGS
-        </div>
       </div>
     </div>
   </div>
@@ -63,16 +58,11 @@ export default {
   background: $White;
 }
 
-.app-logs {
-  margin: -20px -15px;
-  padding: 20px 15px;
-  background: $White;
-  width: 100%;
-  z-index: 10;
-}
-
 .app-body {
   padding-top: 100px;
-  height: 1500px;
+
+  .left-panel {
+    z-index: 10;
+  }
 }
 </style>

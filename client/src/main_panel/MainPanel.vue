@@ -50,16 +50,17 @@ export default {
 @import "../_variables.scss";
 
 .search-bar {
-  margin: -10px -15px;
-  padding: 10px 15px;
+  margin: -10px -50%;
+  padding: 10px 50%;
   background: $White;
-  width: 100%;
+  width: 150%;
   box-shadow: 1px 1px 2px $MediumGray;
   z-index: 9;
 }
 
 .action-bar {
-  margin-left: -50px
+  margin-left: -50px;
+  z-index: 10;
 }
 
 .item-container {

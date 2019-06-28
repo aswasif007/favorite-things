@@ -31,7 +31,6 @@ export default {
   .header {
     position: relative;
     font-size: 16px;
-    width: 140px;
 
     .title {
       font-weight: bold;
@@ -55,13 +54,13 @@ export default {
 
   .body {
     margin-top: 25px;
+    width: 220px;
 
     .category {
       position: relative;
       line-height: 22px;
       margin: 5px -5px;
       padding: 0 5px;
-      width: 140px;
       border-radius: 3px;
       transition: background-color 0.4s ease;
 
