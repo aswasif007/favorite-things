@@ -1,7 +1,10 @@
 <template>
   <div id="GridView" class="row">
     <div v-for="item in items" :key="item.guid" class="col-sm-12 col-md-6 col-lg-4 col-xl-3 cards">
-      <card :item="item" />
+      <card
+        @click.native="showItem(item)"
+        :item="item"
+      />
     </div>
   </div>
 </template>
@@ -11,7 +14,7 @@ import Card from './Card.vue';
 
 export default {
   name: 'GridView',
-  props: ['items'],
+  props: ['items', 'showItem'],
   components: {
     Card,
   }

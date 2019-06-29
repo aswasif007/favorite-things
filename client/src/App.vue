@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="col-sm-6 col-md-8 col-lg-9">
-        <main-panel />
+        <main-panel :categories="categories"/>
       </div>
     </div>
   </div>

@@ -18,29 +18,48 @@
       </div>
     </div>
     <div class="item-container">
-      <grid-view :items="items" />
+      <grid-view
+        :items="items"
+        :showItem="openModal"
+      />
     </div>
+    <item-modal v-if="!!modalItem"
+      :categories="categories"
+      :item="modalItem"
+      :close="closeModal"
+    />
   </div>
 </template>
 
 <script>
+import ItemModal from './ItemModal.vue';
 import GridView from './grid_view/GridView.vue';
+
 import { getItems } from '../services';
 
 export default {
   name: "MainPanel",
+  props: ['categories'],
   data () {
     return {
       items: [],
+      modalItem: null,
     };
   },
   created () {
     this.fetchItems();
   },
   components: {
-    GridView
+    GridView,
+    ItemModal,
   },
   methods: {
+    openModal (item) {
+      this.modalItem = item;
+    },
+    closeModal () {
+      this.modalItem = null;
+    },
     async fetchItems () {
       const itemResp = await getItems();
       this.items = itemResp.data;
