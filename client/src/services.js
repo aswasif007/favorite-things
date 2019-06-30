@@ -12,7 +12,13 @@ function getCategories() {
   return axios.get(url);
 }
 
+function createCategory(category) {
+  const url = API + 'categories/';
+  return axios.post(url, category);
+}
+
 export {
   getItems,
   getCategories,
+  createCategory,
 };

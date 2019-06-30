@@ -2,7 +2,7 @@
   <div id="LeftPanel">
     <div class="header">
       <span class="title">Categories</span>
-      <span class="action"><i class="fas fa-plus"></i></span>
+      <span @click="showAddCategory" class="action"><i class="fas fa-plus"></i></span>
     </div>
     <div class="body">
       <div class="category" v-for="category in categories" :key="category.guid">
@@ -10,8 +10,17 @@
         <div class="title">{{category.title}}</div>
         <div class="action"><i class="fas fa-pen"></i></div>
       </div>
+      <div v-if="newCategory" class="category">
+        <div class="dot" :style="{color: newCategory.color_code}">&bull;</div>
+        <input type="text" placeholder="Add new category..."
+          ref="titleInput"
+          v-model="newCategory.title"
+          @blur="hideAddCategory"
+          @keypress.enter="createCategory"
+        >
+      </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -20,6 +29,27 @@ import { getCategories } from '../services';
 export default {
   name: 'LeftPanel',
   props: ['categories'],
+  data () {
+    return {
+      newCategory: null,
+    };
+  },
+  methods: {
+    showAddCategory () {
+      this.newCategory = {
+        title: '',
+        color_code: '#' + (Math.random()*0xFFFFFF<<0).toString(16),
+      };
+      setTimeout(() => this.$refs.titleInput.focus());
+    },
+    hideAddCategory () {
+      this.newCategory = null;
+    },
+    createCategory () {
+      this.$emit('create-category', this.newCategory);
+      this.hideAddCategory();
+    },
+  }
 }
 </script>
 
@@ -71,13 +101,15 @@ export default {
         line-height: 23px;
       }
 
-      .title {
+      .title, input {
         font-size: 14px;
         font-weight: bold;
-        margin-left: 15px;
+        margin-left: 10px;
+        padding-left: 5px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        border: none;
       }
 
       .action {

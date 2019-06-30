@@ -8,7 +8,10 @@
     <div class="row app-body">
       <div class="col">
         <div class="position-fixed left-panel">
-          <left-panel :categories="categories" />
+          <left-panel
+            :categories="categories"
+            @create-category="createCategory"
+          />
         </div>
       </div>
       <div class="col-sm-6 col-md-8 col-lg-9">
@@ -22,7 +25,7 @@
 import MainPanel from './main_panel/MainPanel.vue';
 import LeftPanel from './left_panel/LeftPanel.vue';
 
-import { getCategories } from './services';
+import { getCategories, createCategory } from './services';
 
 export default {
   name: 'app',
@@ -42,6 +45,15 @@ export default {
     async fetchCategories () {
       const categoryResp = await getCategories();
       this.categories = categoryResp.data;
+    },
+    async createCategory (category) {
+      if (!category.title.trim()) { category.title = 'New Category'; }
+
+      const categoryResp = await createCategory(category);
+
+      if (categoryResp.status === 201) {
+        this.categories.push(categoryResp.data);
+      }
     },
   },
 }
