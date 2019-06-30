@@ -24,6 +24,7 @@
 
 <script>
 import * as _ from 'lodash';
+import EventBus from './eventBus';
 
 import MainPanel from './main_panel/MainPanel.vue';
 import LeftPanel from './left_panel/LeftPanel.vue';
@@ -63,6 +64,7 @@ export default {
 
       if (categoryResp.status === 204) {
         this.categories = _.without(this.categories, category);
+        EventBus.$emit('refresh-items');
       }
     },
   },
