@@ -1,5 +1,5 @@
 <template>
-  <div @refresh-items="fetchItems" id="MainPanel">
+  <div id="MainPanel">
     <div class="row">
       <div class="col-8">
         <div class="position-fixed search-bar">
@@ -37,21 +37,13 @@ import EventBus from '../eventBus';
 import ItemModal from './ItemModal.vue';
 import GridView from './grid_view/GridView.vue';
 
-import { getItems } from '../services';
-
 export default {
   name: "MainPanel",
-  props: ['categories'],
+  props: ['categories', 'items'],
   data () {
     return {
-      items: [],
       modalItem: null,
     };
-  },
-  created () {
-    this.fetchItems();
-
-    EventBus.$on('refresh-items', this.fetchItems);
   },
   components: {
     GridView,
@@ -63,10 +55,6 @@ export default {
     },
     closeModal () {
       this.modalItem = null;
-    },
-    async fetchItems () {
-      const itemResp = await getItems();
-      this.items = itemResp.data;
     },
   }
 }

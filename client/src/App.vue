@@ -10,13 +10,14 @@
         <div class="position-fixed left-panel">
           <left-panel
             :categories="categories"
-            @create-category="createCategory"
-            @delete-category="deleteCategory"
           />
         </div>
       </div>
       <div class="col-sm-6 col-md-8 col-lg-9">
-        <main-panel :categories="categories"/>
+        <main-panel
+          :items="items"
+          :categories="categories"
+        />
       </div>
     </div>
   </div>
@@ -29,23 +30,35 @@ import EventBus from './eventBus';
 import MainPanel from './main_panel/MainPanel.vue';
 import LeftPanel from './left_panel/LeftPanel.vue';
 
-import { getCategories, createCategory, deleteCategory } from './services';
+import { getItems, getCategories, createCategory, deleteCategory } from './services';
 
 export default {
   name: 'app',
   data () {
     return {
       categories: [],
+      items: [],
     };
   },
   created () {
     this.fetchCategories();
+    this.fetchItems();
+
+    EventBus.$on('refresh-items', this.fetchItems);
+
+    EventBus.$on('refresh-categories', this.createCategory);
+    EventBus.$on('create-category', this.createCategory);
+    EventBus.$on('delete-category', this.deleteCategory);
   },
   components: {
     MainPanel,
     LeftPanel,
   },
   methods: {
+    async fetchItems () {
+      const itemResp = await getItems();
+      this.items = itemResp.data;
+    },
     async fetchCategories () {
       const categoryResp = await getCategories();
       this.categories = categoryResp.data;

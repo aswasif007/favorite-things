@@ -8,7 +8,7 @@
       <div class="category" v-for="category in categories" :key="category.guid">
         <div class="dot" :style="{color: category.color_code}">&bull;</div>
         <div class="title">{{category.title}}</div>
-        <div @click="$emit('delete-category', category)" class="action"><i class="fas fa-trash"></i></div>
+        <div @click="deleteCategory(category)" class="action"><i class="fas fa-trash"></i></div>
       </div>
       <div v-if="newCategory" class="category">
         <div class="dot" :style="{color: newCategory.color_code}">&bull;</div>
@@ -24,12 +24,13 @@
 </template>
 
 <script>
+import EventBus from '../eventBus';
+
 import { getCategories } from '../services';
 
 export default {
   name: 'LeftPanel',
   props: ['categories'],
-  events: ['create-category', 'delete-category'],
   data () {
     return {
       newCategory: null,
@@ -47,8 +48,11 @@ export default {
       this.newCategory = null;
     },
     createCategory () {
-      this.$emit('create-category', this.newCategory);
+      EventBus.$emit('create-category', this.newCategory);
       this.hideAddCategory();
+    },
+    deleteCategory (category) {
+      EventBus.$emit('delete-category', category);
     },
   }
 }
