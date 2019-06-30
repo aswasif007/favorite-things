@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 
 
 color_code_validator = RegexValidator(
-    r'^#([1-9a-fA-F]{3}|[1-9a-fA-F]{6})$',
+    r'^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$',
     message='Must be a valid color hex',
     code='invalid_hex',
 )
