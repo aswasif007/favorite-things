@@ -8,7 +8,7 @@
       <div class="category" v-for="category in categories" :key="category.guid">
         <div class="dot" :style="{color: category.color_code}">&bull;</div>
         <div class="title">{{category.title}}</div>
-        <div class="action"><i class="fas fa-pen"></i></div>
+        <div @click="$emit('delete-category', category)" class="action"><i class="fas fa-trash"></i></div>
       </div>
       <div v-if="newCategory" class="category">
         <div class="dot" :style="{color: newCategory.color_code}">&bull;</div>
@@ -29,6 +29,7 @@ import { getCategories } from '../services';
 export default {
   name: 'LeftPanel',
   props: ['categories'],
+  events: ['create-category', 'delete-category'],
   data () {
     return {
       newCategory: null,

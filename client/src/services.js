@@ -17,8 +17,14 @@ function createCategory(category) {
   return axios.post(url, category);
 }
 
+function deleteCategory(categoryGuid) {
+  const url = API + 'categories/' + categoryGuid;
+  return axios.delete(url);
+}
+
 export {
   getItems,
   getCategories,
   createCategory,
+  deleteCategory,
 };
