@@ -7,6 +7,11 @@ function getItems() {
   return axios.get(url);
 }
 
+function deleteItem(itemGuid) {
+  const url = API + 'items/' + itemGuid;
+  return axios.delete(url);
+}
+
 function getCategories() {
   const url = API + 'categories/';
   return axios.get(url);
@@ -24,6 +29,7 @@ function deleteCategory(categoryGuid) {
 
 export {
   getItems,
+  deleteItem,
   getCategories,
   createCategory,
   deleteCategory,

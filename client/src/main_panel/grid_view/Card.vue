@@ -4,16 +4,22 @@
     <div class="title">{{item.title}}</div>
     <div class="rank">#{{item.rank}}</div>
     <div class="actions">
-      <i class="fas fa-edit"></i>
-      <i class="fas fa-trash"></i>
+      <span @click.stop="deleteItem"><i class="fas fa-trash"></i></span>
     </div>
   </div>
 </template>
 
 <script>
+import EventBus from '../../eventBus';
+
 export default {
   name: "Card",
   props: ['item'],
+  methods: {
+    deleteItem () {
+      EventBus.$emit('delete-item', this.item);
+    },
+  },
 }
 </script>
 
@@ -56,12 +62,13 @@ export default {
     right: 5px;
     display: none;
 
-    i {
-      margin-right: 5px;
+    span {
+      margin-left: 5px;
       font-size: 14px;
       opacity: 0.6;
 
       &:hover {
+        color: $DodgerBlue;
         opacity: 1;
       }
     }

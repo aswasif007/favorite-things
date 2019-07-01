@@ -30,7 +30,7 @@ import EventBus from './eventBus';
 import MainPanel from './main_panel/MainPanel.vue';
 import LeftPanel from './left_panel/LeftPanel.vue';
 
-import { getItems, getCategories, createCategory, deleteCategory } from './services';
+import { getItems, deleteItem, getCategories, createCategory, deleteCategory } from './services';
 
 export default {
   name: 'app',
@@ -45,6 +45,7 @@ export default {
     this.fetchItems();
 
     EventBus.$on('refresh-items', this.fetchItems);
+    EventBus.$on('delete-item', this.deleteItem);
 
     EventBus.$on('refresh-categories', this.createCategory);
     EventBus.$on('create-category', this.createCategory);
@@ -58,6 +59,13 @@ export default {
     async fetchItems () {
       const itemResp = await getItems();
       this.items = itemResp.data;
+    },
+    async deleteItem (item) {
+      const itemResp = await deleteItem(item.guid);
+
+      if (itemResp.status === 204) {
+        this.items = _.without(this.items, item);
+      }
     },
     async fetchCategories () {
       const categoryResp = await getCategories();
