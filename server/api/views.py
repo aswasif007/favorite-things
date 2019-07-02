@@ -20,8 +20,21 @@ class SingleCategoryView(RetrieveUpdateDestroyAPIView):
 
 
 class ItemView(ListCreateAPIView):
-    queryset = Item.objects.all()
     serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        queryset = Item.objects.all()
+
+        query_string = self.request.query_params.get('q')
+        category = self.request.query_params.get('category')
+
+        if query_string:
+            queryset = queryset.filter(title__icontains=query_string)
+
+        if category:
+            queryset = queryset.filter(category=category)
+
+        return queryset
 
 
 class SingleItemView(RetrieveUpdateDestroyAPIView):

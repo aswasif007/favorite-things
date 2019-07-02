@@ -107,6 +107,23 @@ class TestItemView(TestCase):
             assertObjects(expected_item, returned_item, ['guid', 'title', 'description', 'metadata', 'rank'])
             self.assertEqual(expected_item.category.guid, returned_item['category'])
 
+    def test_get_with_query_param(self):
+        new_category = Category.objects.create(title='new_test')
+
+        Item.objects.create(title='search string', category=new_category)
+        Item.objects.create(title='search string', category=self.category)
+        Item.objects.create(title='different string', category=self.category)
+
+        response = self.client.get(self.endpoint + f'?q=search&category={self.category.guid}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        returned_items = response.json()
+        expected_items = Item.objects.filter(title__icontains='search', category=self.category.guid)
+        self.assertEqual(len(expected_items), len(returned_items))
+
+        for expected_item, returned_item in zip(expected_items, returned_items):
+            assertObjects(expected_item, returned_item, ['guid'])
+
     def test_create(self):
         request_body = {
             'title': 'test_item_3',
