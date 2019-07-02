@@ -2,29 +2,30 @@
   <div @click="close" id="ItemModal">
     <div class="modal-view" @click="event => event.stopPropagation()">
       <div class="header">
-        <input v-if="isEditable" ref="title" type="text" placeholder="Title goes here..."
-          :model="editedItem.title"
-          :value="editedItem.title"
+        <input ref="title" type="text" placeholder="Title goes here..."
+          v-if="isEditable" 
+          v-model="displayItem.title"
         >
-        <div v-else class="title">{{item.title}}</div>
+        <div v-else class="title">{{displayItem.title}}</div>
       </div>
       <hr>
       <div class="body">
-        <textarea v-if="isEditable" placeholder="Description goes here"
-          :model="item.description"
-          :value="item.description"
+        <textarea placeholder="Description goes here"
+          v-if="isEditable" 
+          v-model="displayItem.description"
         />
-        <div v-else class="description">{{item.description}}</div>
+        <div v-else class="description">{{displayItem.description}}</div>
       </div>
       <hr>
       <div class="footer">
-        <span class="category-dot" :style="{color: item.category_obj.color_code}">
-          <i class="fas fa-circle"></i>
+        <span class="category-dot" :style="{color: colorCode}">
+          <i :class="`${displayItem.category ? 'fas' : 'far'} fa-circle`"></i>
         </span>
-        <select v-if="isEditable" :value="editedItem.category">
+        <select v-if="isEditable" v-model="displayItem.category">
+          <option :value="undefined" disabled selected hidden>Choose category...</option>
           <option v-for="category in categories" :key="category.guid" :value="category.guid">{{category.title}}</option>
         </select>
-        <div v-else class="category">{{item.category_obj.title}}</div>
+        <div v-else class="category">{{displayItem.category_obj.title}}</div>
 
         <div class="actions">
           <span v-if="isEditable">
@@ -32,7 +33,7 @@
             <span @click="handleSave" class="icon"><i class="fas fa-check"></i></span>
           </span>
           <span v-else>
-            <span class="timestamp">Last updated: {{item.modified_at | formatTimestamp}}</span>
+            <span class="timestamp">Last updated: {{displayItem.modified_at | formatTimestamp}}</span>
             <span @click="setEditable" class="icon"><i class="fas fa-edit"></i></span>
             <span @click="handleDelete" class="icon"><i class="fas fa-trash"></i></span>
           </span>
@@ -46,18 +47,31 @@
 import _ from 'lodash';
 import moment from 'moment';
 
+import EventBus from '../eventBus';
+
 export default {
   name: 'ItemModal',
   props: ['categories', 'item', 'close'],
   data () {
     return {
-      isEditable: false,
-      editedItem: _.pick(this.item, ['title', 'description', 'category']),
+      displayItem: _.clone(this.item),
+      isEditable: _.isEmpty(this.item),
     };
+  },
+  mounted () {
+    if (this.isEditable) {
+      this.$refs.title.focus();
+    }
   },
   filters: {
     formatTimestamp (timestamp) {
       return moment(timestamp).fromNow();
+    },
+  },
+  computed: {
+    colorCode () {
+      const category = _.find(this.categories, {'guid': this.displayItem.category});
+      return _.get(category, 'color_code', '#000');
     },
   },
   methods: {
@@ -69,10 +83,16 @@ export default {
       // TODO
     },
     discardEdit () {
-      this.isEditable = false;
+      this.displayItem = this.item;
+      this.isEditable = _.isEmpty(this.item);
     },
     handleSave () {
-      // TODO
+      if (this.displayItem.guid) {
+        EventBus.$emit('update-item', _.pick(this.displayItem, ['guid', 'title', 'category', 'description']));
+      } else {
+        EventBus.$emit('create-item', this.displayItem);
+      }
+      this.close();
     },
   }
 }

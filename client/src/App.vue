@@ -30,7 +30,7 @@ import EventBus from './eventBus';
 import MainPanel from './main_panel/MainPanel.vue';
 import LeftPanel from './left_panel/LeftPanel.vue';
 
-import { getItems, deleteItem, getCategories, createCategory, deleteCategory } from './services';
+import { getItems, createItem, updateItem, deleteItem, getCategories, createCategory, deleteCategory } from './services';
 
 export default {
   name: 'app',
@@ -45,6 +45,8 @@ export default {
     this.fetchItems();
 
     EventBus.$on('refresh-items', this.fetchItems);
+    EventBus.$on('create-item', this.createItem);
+    EventBus.$on('update-item', this.updateItem);
     EventBus.$on('delete-item', this.deleteItem);
 
     EventBus.$on('refresh-categories', this.createCategory);
@@ -59,6 +61,25 @@ export default {
     async fetchItems () {
       const itemResp = await getItems();
       this.items = itemResp.data;
+    },
+    async createItem (item) {
+      if (!item.title.trim()) { item.title = 'New Item'; }
+
+      const itemResp = await createItem(item);
+
+      if (itemResp.status === 201) {
+        this.items.unshift(itemResp.data);
+      }
+    },
+    async updateItem (item) {
+      if (!item.title.trim()) { item = _.omit('title'); }
+
+      const itemResp = await updateItem(item);
+
+      if (itemResp.status === 200) {
+        this.items = _.filter(this.items, _item => _item.guid !== item.guid);
+        this.items.unshift(itemResp.data);
+      }
     },
     async deleteItem (item) {
       const itemResp = await deleteItem(item.guid);

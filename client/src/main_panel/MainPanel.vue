@@ -12,7 +12,7 @@
           <div class="position-fixed action-bar">
             <span><i class="fas fa-grip-horizontal"></i></span>
             <span><i class="fas fa-bars"></i></span>
-            <span><i class="fas fa-plus"></i></span>
+            <span @click="openModal({})"><i class="fas fa-plus"></i></span>
           </div>
         </div>
       </div>
