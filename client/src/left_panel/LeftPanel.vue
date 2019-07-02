@@ -40,7 +40,7 @@ export default {
     showAddCategory () {
       this.newCategory = {
         title: '',
-        color_code: '#' + (Math.random()*0xFFFFFF<<0).toString(16),
+        color_code: '#' + Math.random().toString(16).slice(2, 8),
       };
       setTimeout(() => this.$refs.titleInput.focus());
     },
