@@ -16,7 +16,7 @@ export default {
   name: "Card",
   props: ['item'],
   methods: {
-    deleteItem () {
+    deleteItem() {
       EventBus.$emit('delete-item', this.item);
     },
   },

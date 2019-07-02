@@ -31,27 +31,27 @@ import { getCategories } from '../services';
 export default {
   name: 'LeftPanel',
   props: ['categories'],
-  data () {
+  data() {
     return {
       newCategory: null,
     };
   },
   methods: {
-    showAddCategory () {
+    showAddCategory() {
       this.newCategory = {
         title: '',
         color_code: '#' + Math.random().toString(16).slice(2, 8),
       };
       setTimeout(() => this.$refs.titleInput.focus());
     },
-    hideAddCategory () {
+    hideAddCategory() {
       this.newCategory = null;
     },
-    createCategory () {
+    createCategory() {
       EventBus.$emit('create-category', this.newCategory);
       this.hideAddCategory();
     },
-    deleteCategory (category) {
+    deleteCategory(category) {
       EventBus.$emit('delete-category', category);
     },
   }

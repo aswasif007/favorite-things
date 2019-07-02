@@ -52,41 +52,41 @@ import EventBus from '../eventBus';
 export default {
   name: 'ItemModal',
   props: ['categories', 'item', 'close'],
-  data () {
+  data() {
     return {
       displayItem: _.clone(this.item),
       isEditable: _.isEmpty(this.item),
     };
   },
-  mounted () {
+  mounted() {
     if (this.isEditable) {
       this.$refs.title.focus();
     }
   },
   filters: {
-    formatTimestamp (timestamp) {
+    formatTimestamp(timestamp) {
       return moment(timestamp).fromNow();
     },
   },
   computed: {
-    colorCode () {
+    colorCode() {
       const category = _.find(this.categories, {'guid': this.displayItem.category});
       return _.get(category, 'color_code', '#000');
     },
   },
   methods: {
-    setEditable () {
+    setEditable() {
       this.isEditable = true;
       setTimeout(() => this.$refs.title.focus());
     },
-    handleDelete () {
+    handleDelete() {
       // TODO
     },
-    discardEdit () {
+    discardEdit() {
       this.displayItem = this.item;
       this.isEditable = _.isEmpty(this.item);
     },
-    handleSave () {
+    handleSave() {
       if (this.displayItem.guid) {
         EventBus.$emit('update-item', _.pick(this.displayItem, ['guid', 'title', 'category', 'description']));
       } else {

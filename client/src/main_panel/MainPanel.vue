@@ -40,7 +40,7 @@ import GridView from './grid_view/GridView.vue';
 export default {
   name: "MainPanel",
   props: ['categories', 'items'],
-  data () {
+  data() {
     return {
       modalItem: null,
     };
@@ -50,10 +50,10 @@ export default {
     ItemModal,
   },
   methods: {
-    openModal (item) {
+    openModal(item) {
       this.modalItem = item;
     },
-    closeModal () {
+    closeModal() {
       this.modalItem = null;
     },
   }

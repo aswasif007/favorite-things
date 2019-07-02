@@ -58,11 +58,11 @@ export default {
     LeftPanel,
   },
   methods: {
-    async fetchItems () {
+    async fetchItems(params) {
       const itemResp = await getItems();
       this.items = itemResp.data;
     },
-    async createItem (item) {
+    async createItem(item) {
       if (!item.title.trim()) { item.title = 'New Item'; }
 
       const itemResp = await createItem(item);
@@ -71,7 +71,7 @@ export default {
         this.items.unshift(itemResp.data);
       }
     },
-    async updateItem (item) {
+    async updateItem(item) {
       if (!item.title.trim()) { item = _.omit('title'); }
 
       const itemResp = await updateItem(item);
@@ -81,18 +81,18 @@ export default {
         this.items.unshift(itemResp.data);
       }
     },
-    async deleteItem (item) {
+    async deleteItem(item) {
       const itemResp = await deleteItem(item.guid);
 
       if (itemResp.status === 204) {
         this.items = _.without(this.items, item);
       }
     },
-    async fetchCategories () {
+    async fetchCategories() {
       const categoryResp = await getCategories();
       this.categories = categoryResp.data;
     },
-    async createCategory (category) {
+    async createCategory(category) {
       if (!category.title.trim()) { category.title = 'New Category'; }
 
       const categoryResp = await createCategory(category);
@@ -101,7 +101,7 @@ export default {
         this.categories.push(categoryResp.data);
       }
     },
-    async deleteCategory (category) {
+    async deleteCategory(category) {
       const categoryResp = await deleteCategory(category.guid);
 
       if (categoryResp.status === 204) {
