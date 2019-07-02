@@ -54,7 +54,7 @@ export default {
   props: ['categories', 'item', 'close'],
   data() {
     return {
-      displayItem: _.clone(this.item),
+      displayItem: this.item,
       isEditable: _.isEmpty(this.item),
     };
   },
@@ -80,7 +80,8 @@ export default {
       setTimeout(() => this.$refs.title.focus());
     },
     handleDelete() {
-      // TODO
+      EventBus.$emit('delete-item', this.item);
+      this.close();
     },
     discardEdit() {
       this.displayItem = this.item;
