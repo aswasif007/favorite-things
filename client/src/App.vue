@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     async fetchItems(params) {
-      const itemResp = await getItems();
+      const itemResp = await getItems(params || {});
       this.items = itemResp.data;
     },
     async createItem(item) {

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-8">
         <div class="position-fixed search-bar">
-          <input type="text" :model="query">
+          <input type="text" v-model="query" @keyup="searchItems">
           <span><i class="fa fa-search"></i></span>
         </div>
       </div>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import * as _ from 'lodash';
+
 import EventBus from '../eventBus';
 
 import ItemModal from './ItemModal.vue';
@@ -43,6 +45,7 @@ export default {
   data() {
     return {
       modalItem: null,
+      query: '',
     };
   },
   components: {
@@ -56,7 +59,10 @@ export default {
     closeModal() {
       this.modalItem = null;
     },
-  }
+    searchItems: _.debounce(function() {
+      EventBus.$emit('refresh-items', {q: this.query});
+    }, 500),
+  },
 }
 </script>
 

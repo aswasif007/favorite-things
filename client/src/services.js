@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API = 'http://localhost:8000/api/v0/';
 
-function getItems() {
+function getItems(params) {
   const url = API + 'items/';
-  return axios.get(url);
+  return axios.get(url, { params });
 }
 
 function createItem(item) {
